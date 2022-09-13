@@ -1,15 +1,20 @@
+
 const OPTIONS = {
 	method: 'GET',
 	headers: {
 		'X-RapidAPI-Key': '53e8757e87msh78be76563794de7p1dafb9jsn260ccbf1fcd9',
-		'X-RapidAPI-Host': 'ip-geolocation-and-threat-detection.p.rapidapi.com'
+		'X-RapidAPI-Host': 'ip-geolocation-ipwhois-io.p.rapidapi.com'
 	}
 };
 
-const RequestIp = ip => {
-   return fetch(`https://ip-geolocation-and-threat-detection.p.rapidapi.com/${ip}`, OPTIONS)
-	.then(res => res.json())
-	.catch(err => console.error(err));
+
+const RequestIp = async ip => {
+   try {
+    const res = await fetch(`https://ip-geolocation-ipwhois-io.p.rapidapi.com/json/${ip}`, OPTIONS);
+    return await res.json();
+  } catch (err) {
+    return console.error(err);
+  }
 }
 
     const $form = document.getElementById("form");
@@ -40,18 +45,19 @@ const RequestIp = ip => {
 
       if (data) {
         $elemToShow.innerHTML = JSON.stringify(data, null, 2);
+        console.log(data)
 
         //User Info
-        $city.innerHTML = "City: " + JSON.stringify(data.location["city"]);
-        let latitud ="lat: " + JSON.stringify(data.location["latitude"]);
-        let longitud = "long: " + JSON.stringify(data.location["longitude"]);
+        $city.innerHTML = "City: " + JSON.stringify(data.city);
+        let latitud ="lat: " + JSON.stringify(data.latitude);
+        let longitud = "long: " + JSON.stringify(data.longitude);
         $location.innerHTML = latitud + " | " + longitud;
-        $postalCode.innerHTML = "Postal Code: " + JSON.stringify(data.location["postal"]);
+        $postalCode.innerHTML = "Country Phone: " + JSON.stringify(data.country_phone);
 
         //Server Info
-        $servCountry.innerHTML = "Country: " + JSON.stringify(data.location.country["name"]);
-        $company.innerHTML = "Company: " + JSON.stringify(data.company["name"]);
-        $domain.innerHTML = "Domain: " + JSON.stringify(data.company["domain"]);
+        $servCountry.innerHTML = "Country: " + JSON.stringify(data.country);
+        $company.innerHTML = "Company: " + JSON.stringify(data.org);
+        $domain.innerHTML = "Region: " + JSON.stringify(data.region);
 
       } else {
         $elemToShow.innerHTML = "No Data";
